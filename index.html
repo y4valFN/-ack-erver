@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuval - System Compromised</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier Prime', monospace;
+            background: #000;
+            color: #00ff00;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            animation: screen-shake 0.3s infinite; /* Added from second code */
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .hacker-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #ff0000;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            animation: pulse-red 2s infinite;
+        }
+
+        .main-title {
+            font-size: 2rem;
+            color: #ff0000;
+            font-weight: bold;
+            text-shadow: 0 0 20px #ff0000;
+            margin-bottom: 20px;
+            animation: glitch 0.5s infinite; /* Updated timing from second code */
+            letter-spacing: 3px;
+        }
+
+        .arabic-text {
+            font-size: 1.4rem;
+            color: #ff0000;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #ff0000;
+            animation: flicker 2s infinite;
+        }
+
+        .discord-link-text {
+            font-size: 2.5rem;
+            color: #00ff00;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px #00ff00;
+        }
+
+        .discord-url {
+            font-size: 1.2rem;
+            color: #ffffff;
+            text-decoration: none;
+            background: rgba(255, 0, 0, 0.2);
+            padding: 8px 15px;
+            border: 2px solid #ff0000;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            animation: border-pulse 2s infinite;
+        }
+
+        .discord-url:hover {
+            background: rgba(255, 0, 0, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #ff0000;
+        }
+
+        .ip-info {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px #00ff00;
+            animation: data-scroll 20s linear infinite;
+            z-index: 10;
+            min-width: 300px;
+        }
+
+        .ip-line {
+            margin: 8px 0;
+            color: #00ff00;
+        }
+
+        .warning-text {
+            font-size: 1.2rem;
+            color: #ff0000;
+            margin-bottom: 20px;
+            animation: warning-blink 1.5s infinite;
+        }
+
+        .terminal-cursor {
+            animation: cursor-blink 1s infinite;
+        }
+
+        .flying-text {
+            position: absolute;
+            color: #00ff00; /* Matched to first code's color scheme */
+            font-size: 1.5rem;
+            text-shadow: 0 0 15px #00ff00; /* Matched to first code's color scheme */
+            text-transform: uppercase;
+            white-space: nowrap;
+            z-index: 8;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes fly-left {
+            0% { transform: translate(100vw, 0); opacity: 0.8; }
+            100% { transform: translate(-100vw, 0); opacity: 0; }
+        }
+
+        @keyframes fly-right {
+            0% { transform: translate(-100vw, 0); opacity: 0.8; }
+            100% { transform: translate(100vw, 0); opacity: 0; }
+        }
+
+        @keyframes fly-up {
+            0% { transform: translate(0, 100vh); opacity: 0.8; }
+            100% { transform: translate(0, -100vh); opacity: 0; }
+        }
+
+        @keyframes fly-down {
+            0% { transform: translate(0, -100vh); opacity: 0.8; }
+            100% { transform: translate(0, 100vh); opacity: 0; }
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-10px, 10px); }
+            40% { transform: translate(10px, -10px); }
+            60% { transform: translate(-10px, 10px); }
+            80% { transform: translate(10px, -10px); }
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.8); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes border-pulse {
+            0%, 100% { border-color: #ff0000; }
+            50% { border-color: #ffffff; }
+        }
+
+        @keyframes warning-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes cursor-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes data-scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+
+        @keyframes screen-shake {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-10px, 10px); }
+            50% { transform: translate(10px, -10px); }
+            75% { transform: translate(-5px, 5px); }
+        }
+
+        .access-denied {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #ff0000;
+            font-size: 1.2rem;
+            animation: flicker 1s infinite;
+        }
+
+        .system-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #00ff00;
+            font-size: 0.9rem;
+        }
+
+        .hacking-text {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00ff00;
+            font-size: 1rem;
+            animation: flicker 2s infinite;
+        }
+
+        .small-side-image {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 15;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+        
+        .small-side-image:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        
+        .small-side-image img {
+            width: auto;
+            height: 450px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+        }
+        
+        .small-image-text {
+            color: #00ff00;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 8px #00ff00;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 3px 8px;
+            border-radius: 5px;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
+        .youtube-audio {
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="youtube-player" class="youtube-audio" src="https://www.youtube.com/watch?v=NjD0H4eBfng&t=45s" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+
+    <div class="video-background">
+        <video autoplay muted loop>
+            <source src="https://zzlolcute.github.io/6/Anonymous_Digital_Hacker_Face_HD_Royalty-Free_No_copyright_Stock_Video.mp4" type="video/mp4">
+        </video>
+    </div>
+    
+    <div class="overlay"></div>
+    
+    <canvas class="matrix-rain" id="matrix"></canvas>
+    
+    <div class="system-info">
+        System Status: COMPROMISED<br>
+        Security Level: [BREACHED]<br>
+        Time: <span id="current-time"></span>
+    </div>
+    
+    <div class="access-denied">
+         אכלתם זיין על ידי שוט<br>
+       
+    </div>
+    
+    <div class="small-side-image">
+        <img src="discord.png" alt="Side Image">
+    </div>
+    
+    <div class="container">
+        <img src="banner.png" alt="RicoModz" class="hacker-image">
+        
+        <h1 class="main-title">YOUR SERVER HAS BEEN HACKED</h1>
+        
+        <div class="arabic-text">SHOOT ON TOP</div>
+        
+        <div class="discord-link-text"></div>
+        
+        <a href="" class="discord-url" target="_blank">
+            Hacked By Yuval
+        </a>
+        
+        <div class="warning-text">אופס! נראה שיש תקלה זמנית בשרת זה אנא נסה שוב מאוחר יותר<span class="terminal-cursor">_</span></div>
+        
+        <div class="ip-info">
+            <div class="ip-line" id="ip-address">Your IP: Loading...</div>
+            <div class="ip-line" id="country">Country: Loading...</div>
+            <div class="ip-line" id="region">Region: Loading...</div>
+            <div class="ip-line" id="city">City: Loading...</div>
+            <div class="ip-line" id="location">Location: Loading...</div>
+            <div class="ip-line" id="isp">ISP/Org: Loading...</div>
+            <div class="ip-line" id="timezone">Timezone: Loading...</div>
+            <div class="ip-line">Status: TRACKED & MONITORED</div>
+        </div>
+    </div>
+    
+    <div class="hacking-text">
+        [Yuval] - שרת זה נפרץ וכל הפרטים שלך מודלפים בכל מקום אכלת זיין<span class="terminal-cursor">_</span>
+    </div>
+
+    <script>
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const alphabet = katakana + latin + nums;
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const rainDrops = [];
+
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+
+        setInterval(draw, 30);
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Intensified glitch effects from second code
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                document.body.style.filter = 'invert(1) contrast(300%) hue-rotate(90deg)';
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                }, 150);
+            }
+        }, 500);
+
+        // Flying text messages from second code, adapted to first code's theme
+        const messages = [
+            'שרת זה נפרץ',
+            'שוט שולט',
+            'אין לאן לברוח',
+            'הכל מודלף',
+            'אנחנו רואים הכל',
+            'שוט לעולם לא שוכח',
+            'המידע שלך שלנו',
+            'אתה במעקב',
+            'שוט תמיד צופה',
+            'השרת בשליטתנו',
+            'אכלת זיין'
+        ];
+
+        function createFlyingText() {
+            const text = document.createElement('div');
+            text.className = 'flying-text';
+            text.textContent = messages[Math.floor(Math.random() * messages.length)];
+            document.body.appendChild(text);
+
+            const direction = Math.floor(Math.random() * 4);
+            const duration = Math.random() * 3 + 2; // 2-5 seconds
+            const top = Math.random() * window.innerHeight;
+            const left = Math.random() * window.innerWidth;
+
+            text.style.top = top + 'px';
+            text.style.left = left + 'px';
+
+            switch (direction) {
+                case 0: // Left
+                    text.style.animation = `fly-left ${duration}s linear`;
+                    break;
+                case 1: // Right
+                    text.style.animation = `fly-right ${duration}s linear`;
+                    break;
+                case 2: // Up
+                    text.style.animation = `fly-up六合彩開獎號碼查詢 ${duration}s linear`;
+                    break;
+                case 3: // Down
+                    text.style.animation = `fly-down ${duration}s linear`;
+                    break;
+            }
+
+            text.addEventListener('animationend', () => {
+                text.remove();
+            });
+        }
+
+        setInterval(createFlyingText, 1000); // New text every 1 second
+
+        // Enhanced IP and geolocation fetching with multiple APIs
+        async function fetchIPInfo(attempt = 1, maxAttempts = 3) {
+            const apiEndpoints = [
+                { url: 'https://ipapi.co/json/', format: (data) => ({
+                    ip: data.ip || 'Unknown',
+                    country: data.country_name || 'Unknown',
+                    region: data.region || 'Unknown',
+                    city: data.city || 'Unknown',
+                    location: `${data.latitude || 'Unknown'}, ${data.longitude || 'Unknown'}`,
+                    isp: data.org || 'Unknown',
+                    timezone: data.timezone || 'Unknown'
+                })},
+                { url: 'https://ipinfo.io/json', format: (data) => ({
+                    ip: data.ip || 'Unknown',
+                    country: data.country || 'Unknown',
+                    region: data.region || 'Unknown',
+                    city: data.city || 'Unknown',
+                    location: data.loc ? data.loc.split(',').join(', ') : 'Unknown',
+                    isp: data.org || 'Unknown',
+                    timezone: data.timezone || 'Unknown'
+                })},
+                { url: 'https://api.ipgeolocation.io/ipgeo?apiKey=5f2f0b1e4b944f6b8f2a0f7e7b5d7b1e', format: (data) => ({
+                    ip: data.ip || 'Unknown',
+                    country: data.country_name || 'Unknown',
+                    region: data.state_prov || 'Unknown',
+                    city: data.city || 'Unknown',
+                    location: `${data.latitude || 'Unknown'}, ${data.longitude || 'Unknown'}`,
+                    isp: data.isp || 'Unknown',
+                    timezone: data.time_zone?.name || 'Unknown'
+                })}
+            ];
+
+            for (let i = 0; i < apiEndpoints.length; i++) {
+                try {
+                    console.log(`Attempting API ${i + 1}, attempt ${attempt}...`);
+                    const response = await fetch(apiEndpoints[i].url, {
+                        cache: 'no-store',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    const formattedData = apiEndpoints[i].format(data);
+                    
+                    // Update DOM with fetched data
+                    document.getElementById('ip-address').textContent = `Your IP: ${formattedData.ip}`;
+                    document.getElementById('country').textContent = `Country: ${formattedData.country}`;
+                    document.getElementById('region').textContent = `Region: ${formattedData.region}`;
+                    document.getElementById('city').textContent = `City: ${formattedData.city}`;
+                    document.getElementById('location').textContent = `Location: ${formattedData.location}`;
+                    document.getElementById('isp').textContent = `ISP/Org: ${formattedData.isp}`;
+                    document.getElementById('timezone').textContent = `Timezone: ${formattedData.timezone}`;
+                    
+                    console.log('IP data successfully retrieved:', formattedData);
+                    return; // Exit on success
+                } catch (error) {
+                    console.error(`Error with API ${i + 1}:`, error.message);
+                    if (i === apiEndpoints.length - 1 && attempt < maxAttempts) {
+                        console.log(`Retrying all APIs, attempt ${attempt + 1}...`);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        return fetchIPInfo(attempt + 1, maxAttempts);
+                    }
+                }
+            }
+
+            // Fallback if all APIs fail
+            console.error('All APIs failed after max attempts');
+            document.getElementById('ip-address').textContent = 'Your IP: Unable to retrieve';
+            document.getElementById('country').textContent = 'Country: Unable to retrieve';
+            document.getElementById('region').textContent = 'Region: Unable to retrieve';
+            document.getElementById('city').textContent = 'City: Unable to retrieve';
+            document.getElementById('location').textContent = 'Location: Unable to retrieve';
+            document.getElementById('isp').textContent = 'ISP/Org: Unable to retrieve';
+            document.getElementById('timezone').textContent = 'Timezone: Unable to retrieve';
+        }
+
+        // Call the function to fetch IP info when the page loads
+        fetchIPInfo();
+
+        // YouTube Player API
+        let player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onError': onPlayerError
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.setVolume(50);
+            document.addEventListener('click', enableAudio);
+            document.addEventListener('touchstart', enableAudio);
+            setTimeout(() => {
+                if (event.target.getPlayerState() !== 1) {
+                    console.warn('YouTube audio not playing, attempting retry...');
+                    event.target.playVideo();
+                }
+            }, 2000);
+        }
+
+        function onPlayerError(event) {
+            console.error('YouTube player error:', event.data);
+        }
+
+        function enableAudio() {
+            if (player && player.unMute) {
+                player.unMute();
+                player.playVideo();
+            }
+            document.removeEventListener('click', enableAudio);
+            document.removeEventListener('touchstart', enableAudio);
+        }
+
+        // Load YouTube IFrame Player API
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
+</body>
+</html>
